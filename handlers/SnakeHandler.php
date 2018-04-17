@@ -6,7 +6,7 @@
  * Time: 19:25
  */
 
-class A
+class SnakeHandler
 {
 
 }

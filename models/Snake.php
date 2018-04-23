@@ -6,6 +6,8 @@
  * Time: 19:23
  */
 
+namespace models;
+
 class Snake
 {
     private $head;

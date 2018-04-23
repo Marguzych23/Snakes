@@ -6,46 +6,10 @@
  * Time: 20:41
  */
 
-include_once "../models/Snake.php";
+namespace services;
 
 class SnakeService
 {
-
-    private $enemySnake;
-    private $allySnake;
-
-    /**
-     * @return Snake enemy
-     */
-    public function getEnemySnake()
-    {
-        return $this->enemySnake;
-    }
-
-    /**
-     * @param Snake $enemySnake
-     */
-    public function setEnemySnake(Snake $enemySnake)
-    {
-        $this->enemySnake = $enemySnake;
-    }
-
-    /**
-     * @return Snake ally
-     */
-    public function getAllySnake()
-    {
-        return $this->allySnake;
-    }
-
-    /**
-     * @param Snake $allySnake
-     */
-    public function setAllySnake(Snake $allySnake)
-    {
-        $this->allySnake = $allySnake;
-    }
-
 
 
 }

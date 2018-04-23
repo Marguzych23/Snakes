@@ -30,6 +30,27 @@ class GameServiceImpl implements GameService
     {
         // TODO: Implement getStepForSmartSnake() method.
     }
+
+    public function getProbableMovementForOpponentSnake()
+    {
+        // TODO: Implement getProbableMovementForOpponentSnake() method.
+    }
+
+    /**
+     * @return Game
+     */
+    public function getGame()
+    {
+        return $this->game;
+    }
+
+    /**
+     * @param Game $game
+     */
+    public function setGame($game)
+    {
+        $this->game = $game;
+    }
 }
 
 

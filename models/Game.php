@@ -11,6 +11,7 @@ namespace models;
 
 class Game
 {
+    private $id;
     private $enemySnake;
     private $allySnake;
 
@@ -18,11 +19,13 @@ class Game
 
     /**
      * Game constructor.
-     * @param $enemySnake
-     * @param $allySnake
+     * @param int $id
+     * @param Snake $enemySnake
+     * @param Snake $allySnake
      */
-    public function __construct(Snake $enemySnake, Snake $allySnake)
+    public function __construct($id, Snake $enemySnake, Snake $allySnake)
     {
+        $this->id = $id;
         $this->enemySnake = $enemySnake;
         $this->allySnake = $allySnake;
     }

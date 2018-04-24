@@ -10,6 +10,7 @@ namespace models;
 
 class Snake
 {
+    private $id;
     private $head;
     private $body;
     private $tail;
@@ -17,13 +18,15 @@ class Snake
 
     /**
      * Snake constructor.
+     * @param $id
      * @param $head
      * @param $body
      * @param $tail
      * @param $isBite
      */
-    public function __construct($head, $body, $tail, $isBite)
+    public function __construct($id, $head, $body, $tail, $isBite)
     {
+        $this->id = $id;
         $this->head = $head;
         $this->body = $body;
         $this->tail = $tail;

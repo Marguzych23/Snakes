@@ -43,8 +43,17 @@ class GameServiceImpl implements GameService
      */
     private function getStepedSnakesArray(Snake $snake)
     {
+        $snakeToDown = null;
+        $snakeToUp = null;
+        $snakeToRight = null;
+        $snakeToLeft = null;
 //        TODO
-        return [];
+        return array(
+            Game::STEP_DOWN => $snakeToDown,
+            Game::STEP_UP => $snakeToUp,
+            Game::STEP_RIGHT => $snakeToRight,
+            Game::STEP_LEFT => $snakeToLeft
+        );
     }
 
     /**
@@ -94,7 +103,7 @@ class GameServiceImpl implements GameService
             default:
         }
 
-        return new Snake($snake->getId(), $head, $body, $tail, $snake->getisBite());
+        return new Snake($snake->getId(), $head, $body, $tail, $snake->getIsBite());
     }
 
     /**

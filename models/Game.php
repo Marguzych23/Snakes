@@ -14,6 +14,8 @@ class Game
     private $enemySnake;
     private $allySnake;
 
+    const MAP_CELLS_COUNT = 50;
+
     /**
      * Game constructor.
      * @param $enemySnake

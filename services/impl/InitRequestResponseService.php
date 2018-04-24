@@ -18,6 +18,10 @@ class InitRequestResponseService implements RequestResponseService
     private $game;
     private $snake;
 
+    /**
+     * @param $url
+     * @param int $param
+     */
     public function send_request($url, $param=42)
     {
         $curl = curl_init();
@@ -33,9 +37,17 @@ class InitRequestResponseService implements RequestResponseService
 
         $response = curl_exec($curl);
 
-        $this->init($response);
+        if ($response) {
+            $this->init($response);
+        } else {
+            die('Error: "' . curl_error($curl) . '" - Code: ' . curl_errno($curl));
+        }
+
     }
 
+    /**
+     * @param $response
+     */
     public function init($response) {
         if (isset($response['battle_id']) && isset($response['snake_id'])) {
             $battle_id = $response['battle_id'];

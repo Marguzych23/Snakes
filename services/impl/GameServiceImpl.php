@@ -48,6 +48,56 @@ class GameServiceImpl implements GameService
     }
 
     /**
+     * @param string $step
+     * @param Snake $snake
+     * @return Snake
+     */
+    private function getStepedSnake($step, Snake $snake)
+    {
+        $head = $snake->getHead();
+        $body = null;
+        $tail = null;
+
+        $snakeBody = $snake->getBody();
+        if (!empty($snakeBody)) {
+            $body = [];
+            array_push($body, $head);
+            for ($i = 0; $i < count($snakeBody) - 1; $i++) {
+                array_push($body, $snakeBody[$i]);
+            }
+            $tail = $snakeBody[count($snakeBody) - 1];
+        } else {
+            $tail = $head;
+        }
+
+        switch ($step) {
+            case Game::STEP_DOWN:
+                {
+                    $head[1]--;
+                    break;
+                }
+            case Game::STEP_UP:
+                {
+                    $head[1]++;
+                    break;
+                }
+            case Game::STEP_RIGHT:
+                {
+                    $head[0]++;
+                    break;
+                }
+            case Game::STEP_LEFT:
+                {
+                    $head[0]--;
+                    break;
+                }
+            default:
+        }
+
+        return new Snake($snake->getId(), $head, $body, $tail, $snake->getisBite());
+    }
+
+    /**
      * @param Snake $snake1
      * @param Snake $snake2
      * @return int
@@ -68,7 +118,8 @@ class GameServiceImpl implements GameService
     /**
      * @return Game
      */
-    public function getGame()
+    public
+    function getGame()
     {
         return $this->game;
     }
@@ -76,7 +127,8 @@ class GameServiceImpl implements GameService
     /**
      * @param Game $game
      */
-    public function setGame($game)
+    public
+    function setGame($game)
     {
         $this->game = $game;
     }

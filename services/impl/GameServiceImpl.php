@@ -9,6 +9,7 @@
 namespace services\impl;
 
 use models\Game;
+use models\Snake;
 use services\GameService;
 
 class GameServiceImpl implements GameService
@@ -34,6 +35,34 @@ class GameServiceImpl implements GameService
     public function getProbableMovementForOpponentSnake()
     {
         // TODO: Implement getProbableMovementForOpponentSnake() method.
+    }
+
+    /**
+     * @param Snake $snake
+     * @return array Snakes
+     */
+    private function getStepedSnakesArray(Snake $snake)
+    {
+//        TODO
+        return [];
+    }
+
+    /**
+     * @param Snake $snake1
+     * @param Snake $snake2
+     * @return int
+     */
+    private function getDistanceBetweenFirstSnakeHeadAndSecondSnakeTail(Snake $snake1, Snake $snake2)
+    {
+        $x1 = $snake1->getHead()[0];
+        $y1 = $snake1->getHead()[1];
+
+        $x2 = $snake2->getHead()[0];
+        $y2 = $snake2->getHead()[1];
+
+        $distance = sqrt(($x1 - $x2) * ($x1 - $x2) + ($y1 - $y2) * ($y1 - $y2));
+
+        return (int)$distance;
     }
 
     /**

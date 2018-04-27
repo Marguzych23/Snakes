@@ -12,7 +12,7 @@ namespace services\impl;
 use models\Snake;
 use services\RequestResponseService;
 
-class GameDataSharingService implements RequestResponseService
+class GameDataSharingService extends RequestResponseService
 {
 
     private $game;
@@ -21,40 +21,36 @@ class GameDataSharingService implements RequestResponseService
 
     public function send_request($url, $params)
     {
-        $curl = curl_init();
+        $response = parent::getResponse();
+        $curl = parent::getCurl();
 
-        curl_setopt_array($curl, array(
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_URL => $url,
-            CURLOPT_PORT => true,
-            CURLOPT_POSTFIELDS => array(
-                'snake_id' => $params[0],
-                'battle_id' => $params[1]
-            )
-        ));
-
-        $response = curl_exec($curl);
         $response = json_decode($response, true);
 
         if ($response) {
             if ($response[0] == 202) {
                 $this->send_request($url, $params);
             } else {
-                $this->getData($response);
+                $this->setAllData($response);
             }
         } else {
             die('Error: "' . curl_error($curl) . '" - Code: ' . curl_errno($curl));
         }
     }
 
-    public function getData($response) {
+    public function setAllData($response) {
         $snakes = $response['snakes'];
         $battle = $response['battle'];
 
         $enemySnake = $snakes['enemy'];
         $allySnake = $snakes['ally'];
 
-        $this->allySnake = new Snake(null, $allySnake['head'], $allySnake['body'], $allySnake['tail'], )
+        $this->allySnake = new Snake($allySnake['head'], $allySnake['body'], $allySnake['tail'],
+            $allySnake['is_bited']);
+        $this->enemySnake = new Snake($enemySnake['head'], $enemySnake['body'], $enemySnake['tail'],
+            $enemySnake['is_bited']);
+
+        $this->game = InitRequestResponseService::getGame();
+        $this->game->setBattleId($battle['']);
 
     }
 

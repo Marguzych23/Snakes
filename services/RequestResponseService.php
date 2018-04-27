@@ -9,7 +9,41 @@
 namespace services;
 
 
-interface RequestResponseService
+abstract class RequestResponseService
 {
-    public function send_request($url, $params);
+    private $curl;
+    private $response;
+
+    public function send_request($url, $params) {
+        $this->curl = curl_init();
+
+        curl_setopt_array($this->curl, array(
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_URL => $url,
+            CURLOPT_PORT => true,
+            CURLOPT_POSTFIELDS => array(
+                $params,
+            )
+        ));
+
+        $response = curl_exec($this->curl);
+
+        $this->response = $response;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCurl()
+    {
+        return $this->curl;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getResponse()
+    {
+        return $this->response;
+    }
 }

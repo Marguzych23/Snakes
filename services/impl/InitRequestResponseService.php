@@ -13,10 +13,11 @@ use models\Game;
 use models\Snake;
 use services\RequestResponseService;
 
-class InitRequestResponseService implements RequestResponseService
+
+class InitRequestResponseService extends RequestResponseService
 {
-    private $game;
-    private $snake;
+    private static $game;
+    private static $snake;
 
     /**
      * @param $url
@@ -24,18 +25,8 @@ class InitRequestResponseService implements RequestResponseService
      */
     public function send_request($url, $param=42)
     {
-        $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-           CURLOPT_RETURNTRANSFER => true,
-           CURLOPT_URL => $url,
-           CURLOPT_PORT => true,
-           CURLOPT_POSTFIELDS => array(
-               'answer' => $param
-           )
-        ));
-
-        $response = curl_exec($curl);
+        $response = parent::getResponse();
+        $curl = parent::getCurl();
 
         if ($response) {
             $this->init($response);
@@ -54,24 +45,24 @@ class InitRequestResponseService implements RequestResponseService
             $battle_id = $response['battle_id'];
             $snake_id = $response['snake_id'];
 
-            $this->snake = new Snake($snake_id, null, null, null, false);
-            $this->game = new Game($battle_id, null, $this->snake);
+            self::$snake = new Snake(null, null, null, false);
+            self::$game = new Game($battle_id, $snake_id, null, self::$snake);
         }
     }
 
     /**
      * @return mixed
      */
-    public function getGame()
+    public static function getGame()
     {
-        return $this->game;
+        return self::$game;
     }
 
     /**
      * @return mixed
      */
-    public function getSnake()
+    public static function getSnake()
     {
-        return $this->snake;
+        return self::$snake;
     }
 }

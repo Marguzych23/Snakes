@@ -10,43 +10,24 @@ namespace models;
 
 class Snake
 {
-    private $id;
     private $head;
     private $body;
     private $tail;
-    private $isBite;
+    private $isBitten;
 
     /**
      * Snake constructor.
-     * @param $id
      * @param $head
      * @param $body
      * @param $tail
-     * @param $isBite
+     * @param $isBitten
      */
-    public function __construct($id, $head, $body, $tail, $isBite)
+    public function __construct($head, $body, $tail, $isBitten)
     {
-        $this->id = $id;
         $this->head = $head;
         $this->body = $body;
         $this->tail = $tail;
-        $this->isBite = $isBite;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param mixed $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
+        $this->isBitten = $isBitten;
     }
 
     /**
@@ -100,17 +81,17 @@ class Snake
     /**
      * @return mixed
      */
-    public function getIsBite()
+    public function getIsBitten()
     {
-        return $this->isBite;
+        return $this->isBitten;
     }
 
     /**
-     * @param mixed $isBite
+     * @param mixed $isBitten
      */
-    public function setIsBite($isBite)
+    public function setIsBitten($isBitten)
     {
-        $this->isBite = $isBite;
+        $this->isBitten = $isBitten;
     }
 
 

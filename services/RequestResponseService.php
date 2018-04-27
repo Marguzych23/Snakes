@@ -11,5 +11,5 @@ namespace services;
 
 interface RequestResponseService
 {
-    public function send_request($url);
+    public function send_request($url, $params);
 }

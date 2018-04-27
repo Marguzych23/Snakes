@@ -42,13 +42,14 @@ class InitRequestResponseService implements RequestResponseService
         } else {
             die('Error: "' . curl_error($curl) . '" - Code: ' . curl_errno($curl));
         }
-
     }
 
     /**
      * @param $response
      */
     public function init($response) {
+        $response = json_decode($response, true);
+
         if (isset($response['battle_id']) && isset($response['snake_id'])) {
             $battle_id = $response['battle_id'];
             $snake_id = $response['snake_id'];
@@ -56,5 +57,21 @@ class InitRequestResponseService implements RequestResponseService
             $this->snake = new Snake($snake_id, null, null, null, false);
             $this->game = new Game($battle_id, null, $this->snake);
         }
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getGame()
+    {
+        return $this->game;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSnake()
+    {
+        return $this->snake;
     }
 }

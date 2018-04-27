@@ -17,6 +17,11 @@ class Game
 
     const MAP_CELLS_COUNT = 50;
 
+    const STEP_DOWN = "down";
+    const STEP_UP = "up";
+    const STEP_LEFT = "left";
+    const STEP_RIGHT = "right";
+
     /**
      * Game constructor.
      * @param int $id

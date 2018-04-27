@@ -100,7 +100,7 @@ class Snake
     /**
      * @return mixed
      */
-    public function getisBite()
+    public function getIsBite()
     {
         return $this->isBite;
     }

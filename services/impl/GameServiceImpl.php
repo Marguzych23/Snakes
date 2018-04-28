@@ -28,24 +28,69 @@ class GameServiceImpl implements GameService
 
 
     /**
-     * @return null
+     * @return null|string
      */
     public function getStepForSmartSnake()
     {
         $step = null;
         $steps = [];
-        $snakes1 = $this->getSteppedSnakesArray($this->game->getEnemySnake());
-        $snakes2 = $this->getSteppedSnakesArray($this->game->getAllySnake());
-        foreach ($snakes1 as $snake) {
-//            min($this->getDistanceBetweenFirstSnakeHeadAndSecondSnakeTail($snake, $snakes2));
+
+        $allySnakes = $this->getSteppedSnakesArray($this->game->getEnemySnake());
+        $enemySnakes = $this->getSteppedSnakesArray($this->game->getAllySnake());
+
+        foreach ($allySnakes as $snake) {
+            $emptyStep = $this->getProbableMovementForOpponentSnake($snake, $enemySnakes);
+            if ($emptyStep) {
+                array_push($steps, $emptyStep);
+            }
         }
-        // TODO: Implement getStepForSmartSnake() method.
+
+        $step = $this->getTheMostRepetitiveElement($steps);
+        if (!$step) {
+            $enemySnakeProbableStep = $this->getProbableMovementForOpponentSnake($this->game->getEnemySnake(), array($this->game->getAllySnake()));
+            $step = $this->getProbableMovementForOpponentSnake($this->game->getAllySnake(), array($this->getSteppedSnake($enemySnakeProbableStep, $this->game->getEnemySnake())));
+        }
+
         return $step;
     }
 
-    public function getProbableMovementForOpponentSnake()
+    /**
+     * @param array $array
+     * @return null|string
+     */
+    private function getTheMostRepetitiveElement(array &$array)
     {
-        // TODO: Implement getProbableMovementForOpponentSnake() method.
+        if (!empty($array)) {
+            $arrayCountValues = array_count_values($array);
+            if (arsort($arrayCountValues)) {
+                return key($arrayCountValues);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @param Snake $snake
+     * @param array $opponentSnakeSteppedArray
+     * @return string $step
+     */
+    private function getProbableMovementForOpponentSnake(Snake $snake, array $opponentSnakeSteppedArray)
+    {
+        $step = "";
+        $minDistance = Game::MAP_CELLS_COUNT;
+
+        if (!empty($opponentSnakeSteppedArray)) {
+            $step = $opponentSnakeSteppedArray[0][0];
+            $minDistance = $this->getDistanceBetweenFirstSnakeHeadAndSecondSnakeTail($opponentSnakeSteppedArray[0][1], $snake);
+            for ($i = 1; $i < count($opponentSnakeSteppedArray); $i++) {
+                $distance = $this->getDistanceBetweenFirstSnakeHeadAndSecondSnakeTail($opponentSnakeSteppedArray[$i][1], $snake);
+                if ($distance < $minDistance) {
+                    $step = $opponentSnakeSteppedArray[0][0];
+                }
+            }
+        }
+
+        return $step;
     }
 
     /**
@@ -54,63 +99,34 @@ class GameServiceImpl implements GameService
      */
     private function getSteppedSnakesArray(Snake $snake)
     {
-//        $snakeToDown = null;
-//        $snakeToUp = null;
-//        $snakeToRight = null;
-//        $snakeToLeft = null;
-////        TODO optimize code
-//        $snakeHead = $snake->getHead();
-//        $snakeTail = $snake->getTail();
-//        if (!empty($snake->getBody())) {
-//            $snakeTail = $snake->getBody()[0];
-//        }
-//
-//        $x = $snakeHead[0] - $snakeTail[0];
-//        $y = $snakeHead[1] - $snakeTail[1];
-//
-//        if ($x == 0) {
-//            $snakeToRight = $this->getStepedSnake(Game::STEP_RIGHT, $snake);
-//            $snakeToLeft = $this->getStepedSnake(Game::STEP_LEFT, $snake);
-//        } else if ($x > 0) {
-//            $snakeToRight = $this->getStepedSnake(Game::STEP_RIGHT, $snake);
-//        } else {
-//            $snakeToLeft = $this->getStepedSnake(Game::STEP_LEFT, $snake);
-//        }
-//
-//        if ($y == 0) {
-//            $snakeToUp = $this->getStepedSnake(Game::STEP_UP, $snake);
-//            $snakeToDown = $this->getStepedSnake(Game::STEP_DOWN, $snake);
-//        } else if ($y > 0) {
-//            $snakeToUp = $this->getStepedSnake(Game::STEP_UP, $snake);
-//        } else {
-//            $snakeToDown = $this->getStepedSnake(Game::STEP_DOWN, $snake);
-//        }
-
-
         $snakeToRight = $this->getSteppedSnake(Game::STEP_RIGHT, $snake);
         $snakeToLeft = $this->getSteppedSnake(Game::STEP_LEFT, $snake);
         $snakeToUp = $this->getSteppedSnake(Game::STEP_UP, $snake);
         $snakeToDown = $this->getSteppedSnake(Game::STEP_DOWN, $snake);
 
+        $snakes = [];
         if (!$this->checkSnake($snakeToLeft)) {
             $snakeToLeft = null;
+        } else {
+            array_push($snakes, array(Game::STEP_LEFT, $snakeToLeft));
         }
         if (!$this->checkSnake($snakeToRight)) {
             $snakeToRight = null;
+        } else {
+            array_push($snakes, array(Game::STEP_RIGHT, $snakeToRight));
         }
         if (!$this->checkSnake($snakeToDown)) {
             $snakeToDown = null;
+        } else {
+            array_push($snakes, array(Game::STEP_DOWN, $snakeToDown));
         }
         if (!$this->checkSnake($snakeToUp)) {
             $snakeToUp = null;
+        } else {
+            array_push($snakes, array(Game::STEP_UP, $snakeToUp));
         }
 
-        return array(
-            Game::STEP_DOWN => $snakeToDown,
-            Game::STEP_UP => $snakeToUp,
-            Game::STEP_RIGHT => $snakeToRight,
-            Game::STEP_LEFT => $snakeToLeft
-        );
+        return $snakes;
     }
 
     /**

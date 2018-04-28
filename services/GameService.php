@@ -13,6 +13,4 @@ interface GameService
 {
 
     public function getStepForSmartSnake();
-
-    public function getProbableMovementForOpponentSnake();
 }

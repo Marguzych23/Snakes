@@ -200,10 +200,21 @@ class GameServiceImpl implements GameService
     private function checkSnake(Snake $snake)
     {
         $head = $snake->getHead();
+        foreach ($head as $x) {
+            if (!$this->checkOutAbroad($x)) {
+                return false;
+            }
+        }
+
         if (!empty($snake->getBody())) {
             foreach ($snake->getBody() as $item) {
                 if ($item[0] == $head[0] and $item[1] == $head[1]) {
                     return false;
+                }
+                foreach ($item as $x) {
+                    if (!$this->checkOutAbroad($x)) {
+                        return false;
+                    }
                 }
             }
         }
@@ -211,7 +222,24 @@ class GameServiceImpl implements GameService
         if ($snake->getTail()[0] == $head[0] and $snake->getTail()[1] == $head[1]) {
             return false;
         }
+        foreach ($snake->getTail() as $x) {
+            if (!$this->checkOutAbroad($x)) {
+                return false;
+            }
+        }
 
+        return true;
+    }
+
+    /**
+     * @param int $x
+     * @return bool
+     */
+    private function checkOutAbroad(int $x)
+    {
+        if ($x < 0 or $x > Game::MAP_CELLS_COUNT) {
+            return false;
+        }
         return true;
     }
 
@@ -230,8 +258,4 @@ class GameServiceImpl implements GameService
     {
         $this->game = $game;
     }
-
-
 }
-
-

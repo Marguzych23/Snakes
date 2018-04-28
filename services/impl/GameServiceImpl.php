@@ -87,10 +87,10 @@ class GameServiceImpl implements GameService
 //        }
 
 
-        $snakeToRight = $this->getStepedSnake(Game::STEP_RIGHT, $snake);
-        $snakeToLeft = $this->getStepedSnake(Game::STEP_LEFT, $snake);
-        $snakeToUp = $this->getStepedSnake(Game::STEP_UP, $snake);
-        $snakeToDown = $this->getStepedSnake(Game::STEP_DOWN, $snake);
+        $snakeToRight = $this->getSteppedSnake(Game::STEP_RIGHT, $snake);
+        $snakeToLeft = $this->getSteppedSnake(Game::STEP_LEFT, $snake);
+        $snakeToUp = $this->getSteppedSnake(Game::STEP_UP, $snake);
+        $snakeToDown = $this->getSteppedSnake(Game::STEP_DOWN, $snake);
 
         if (!$this->checkSnake($snakeToLeft)) {
             $snakeToLeft = null;
@@ -118,7 +118,7 @@ class GameServiceImpl implements GameService
      * @param Snake $snake
      * @return Snake
      */
-    private function getStepedSnake($step, Snake $snake)
+    private function getSteppedSnake($step, Snake $snake)
     {
         $head = $snake->getHead();
         $body = null;
@@ -160,7 +160,7 @@ class GameServiceImpl implements GameService
             default:
         }
 
-        return new Snake($snake->getId(), $head, $body, $tail, $snake->getIsBite());
+        return new Snake($head, $body, $tail, $snake->getIsBitten());
     }
 
     /**

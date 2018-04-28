@@ -15,7 +15,6 @@ use services\RequestResponseService;
 class GameDataSharingService extends RequestResponseService
 {
 
-    private $game;
     private $allySnake;
     private $enemySnake;
 
@@ -39,7 +38,6 @@ class GameDataSharingService extends RequestResponseService
 
     public function setAllData($response) {
         $snakes = $response['snakes'];
-        $battle = $response['battle'];
 
         $enemySnake = $snakes['enemy'];
         $allySnake = $snakes['ally'];
@@ -49,9 +47,12 @@ class GameDataSharingService extends RequestResponseService
         $this->enemySnake = new Snake($enemySnake['head'], $enemySnake['body'], $enemySnake['tail'],
             $enemySnake['is_bited']);
 
-        $this->game = InitRequestResponseService::getGame();
-        $this->game->setBattleId($battle['']);
+    }
 
+    public function stepsLeft($response) {
+        $battle = $response['battle'];
+
+        return $battle['steps_left'];
     }
 
 }

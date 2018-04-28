@@ -79,7 +79,7 @@ class Snake
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
     public function getIsBitten()
     {
@@ -87,9 +87,9 @@ class Snake
     }
 
     /**
-     * @param mixed $isBitten
+     * @param bool $isBitten
      */
-    public function setIsBitten($isBitten)
+    public function setIsBitten(bool $isBitten)
     {
         $this->isBitten = $isBitten;
     }

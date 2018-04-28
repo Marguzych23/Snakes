@@ -23,7 +23,7 @@ class InitRequestResponseService extends RequestResponseService
      * @param $url
      * @param int $param
      */
-    public function send_request($url, $param=42)
+    public function send_request($url, $param = 42)
     {
         $response = parent::getResponse();
         $curl = parent::getCurl();
@@ -38,7 +38,8 @@ class InitRequestResponseService extends RequestResponseService
     /**
      * @param $response
      */
-    public function init($response) {
+    public function init($response)
+    {
         $response = json_decode($response, true);
 
         if (isset($response['battle_id']) && isset($response['snake_id'])) {

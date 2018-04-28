@@ -11,8 +11,8 @@ namespace models;
 
 class Game
 {
-    private $battle_id;
-    private $snake_id;
+    private $battleId;
+    private $snakeId;
     private $enemySnake;
     private $allySnake;
 
@@ -25,15 +25,15 @@ class Game
 
     /**
      * Game constructor.
-     * @param $battle_id
-     * @param $snake_id
+     * @param $battleId
+     * @param $snakeId
      * @param Snake $enemySnake
      * @param Snake $allySnake
      */
-    public function __construct($battle_id, $snake_id, Snake $enemySnake, Snake $allySnake)
+    public function __construct($battleId, $snakeId, Snake $enemySnake, Snake $allySnake)
     {
-        $this->battle_id = $battle_id;
-        $this->snake_id = $snake_id;
+        $this->battleId = $battleId;
+        $this->snakeId = $snakeId;
         $this->enemySnake = $enemySnake;
         $this->allySnake = $allySnake;
     }
@@ -75,30 +75,30 @@ class Game
      */
     public function getBattleId()
     {
-        return $this->battle_id;
+        return $this->battleId;
     }
 
     /**
-     * @param int $battle_id
+     * @param int $battleId
      */
-    public function setBattleId($battle_id)
+    public function setBattleId(int $battleId)
     {
-        $this->battle_id = $battle_id;
+        $this->battleId = $battleId;
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getSnakeId()
     {
-        return $this->snake_id;
+        return $this->snakeId;
     }
 
     /**
-     * @param mixed $snake_id
+     * @param int $snakeId
      */
-    public function setSnakeId($snake_id): void
+    public function setSnakeId(int $snakeId)
     {
-        $this->snake_id = $snake_id;
+        $this->snakeId = $snakeId;
     }
 }

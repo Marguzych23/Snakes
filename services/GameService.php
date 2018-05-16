@@ -12,5 +12,5 @@ namespace services;
 interface GameService
 {
 
-    public function getStepForSmartSnake();
+    public function getStepForAllySnake();
 }

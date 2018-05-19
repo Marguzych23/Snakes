@@ -9,6 +9,7 @@
 namespace services\impl;
 
 
+use models\Game;
 use models\Snake;
 use services\RequestResponseService;
 
@@ -17,9 +18,11 @@ class GameDataSharingService extends RequestResponseService
 
     private $allySnake;
     private $enemySnake;
+    private $game;
 
     public function send_request($url, $params)
     {
+        parent::send_request($url, $params);
         $response = parent::getResponse();
         $curl = parent::getCurl();
 
@@ -38,15 +41,18 @@ class GameDataSharingService extends RequestResponseService
 
     public function setAllData($response) {
         $snakes = $response['snakes'];
-
         $enemySnake = $snakes['enemy'];
         $allySnake = $snakes['ally'];
-
         $this->allySnake = new Snake($allySnake['head'], $allySnake['body'], $allySnake['tail'],
             $allySnake['is_bited']);
         $this->enemySnake = new Snake($enemySnake['head'], $enemySnake['body'], $enemySnake['tail'],
             $enemySnake['is_bited']);
 
+        $battle = $response["battle"];
+        $battleId = $battle["battle_id"];
+        $snakeId = $battle["snake_id"];
+
+        $this->game = new Game($battleId, $snakeId, $this->enemySnake, $this->allySnake);
     }
 
     public function stepsLeft($response) {
@@ -55,4 +61,27 @@ class GameDataSharingService extends RequestResponseService
         return $battle['steps_left'];
     }
 
+    /**
+     * @return mixed
+     */
+    public function getAllySnake()
+    {
+        return $this->allySnake;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEnemySnake()
+    {
+        return $this->enemySnake;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getGame()
+    {
+        return $this->game;
+    }
 }

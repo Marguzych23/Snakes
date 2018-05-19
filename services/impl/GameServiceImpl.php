@@ -42,11 +42,12 @@ class GameServiceImpl implements GameService
 
         /*
          * Вычисляются все возможные ходы змеи союзника против всех возможных ходов змеи соперника
+         * и добавляются в массив ходов $steps.
          */
         foreach ($allySnakes as $snake) {
-            $emptyStep = $this->getProbableMovementForOpponentSnake($snake, $enemySnakes);
-            if ($emptyStep) {
-                array_push($steps, $emptyStep);
+            $newStep = $this->getProbableMovementForOpponentSnake($snake, $enemySnakes);
+            if ($newStep) {
+                array_push($steps, $newStep);
             }
         }
 
@@ -69,28 +70,18 @@ class GameServiceImpl implements GameService
                 } catch (\Exception $e) {
                 }
                 $step = $steps[$stepNumber];
+
+                if (!$step) {
+                    foreach ($allySnakes as $snake) {
+                        if ($this->checkSnake($snake[1])) {
+                            return $snake[0];
+                        }
+                    }
+                }
             }
         }
 
         return $step;
-    }
-
-    /**
-     * Возвращает самый повторяемый элемент(ход) в массиве ходов змеи.
-     * Если нельзя выделить один конкретный ход, то возращает null.
-     *
-     * @param array $array
-     * @return null|string
-     */
-    private function getTheMostRepetitiveElement(array &$array)
-    {
-        if (!empty($array)) {
-            $arrayCountValues = array_count_values($array);
-            if (arsort($arrayCountValues)) {
-                return key($arrayCountValues);
-            }
-        }
-        return null;
     }
 
     /**
@@ -113,7 +104,10 @@ class GameServiceImpl implements GameService
             $minDistanceBetweenOpponentHeadAndSnakeTail = Game::MAP_CELLS_COUNT;
 
             for ($i = 0; $i < count($opponentSnakeSteppedArray); $i++) {
-                if ($this->checkSnakesRelativeToEachOther($snake, $opponentSnakeSteppedArray[$i][1])) {
+                if ($this->checkSnakesRelativeToEachOther($snake, $opponentSnakeSteppedArray[$i][1], true) < 2) {
+                    if ($this->checkEnemySnakeCorrectBiteAllySnake($snake, $opponentSnakeSteppedArray[$i][1])) {
+                        continue;
+                    }
                     $minDistanceBetweenSnakeHeadAndOpponentTail = $this->getDistanceBetweenFirstSnakeHeadAndSecondSnakeTail($snake, $opponentSnakeSteppedArray[$i][1]);
                     $minDistanceBetweenOpponentHeadAndSnakeTail = $this->getDistanceBetweenFirstSnakeHeadAndSecondSnakeTail($opponentSnakeSteppedArray[$i][1], $snake);
                     $opponentSnakeSteppedArray = $i;
@@ -125,7 +119,10 @@ class GameServiceImpl implements GameService
             }
 
             for ($i = $opponentSnakeNumber; $i < count($opponentSnakeSteppedArray); $i++) {
-                if ($this->checkSnakesRelativeToEachOther($snake, $opponentSnakeSteppedArray[$i])) {
+                if ($this->checkSnakesRelativeToEachOther($snake, $opponentSnakeSteppedArray[$i], true) < 2) {
+                    if ($this->checkEnemySnakeCorrectBiteAllySnake($snake, $opponentSnakeSteppedArray[$i][1])) {
+                        continue;
+                    }
                     $distanceBetweenSnakeHeadAndOpponentTail = $this->getDistanceBetweenFirstSnakeHeadAndSecondSnakeTail($snake, $opponentSnakeSteppedArray[$i][1]);
                     $distanceBetweenOpponentHeadAndSnakeTail = $this->getDistanceBetweenFirstSnakeHeadAndSecondSnakeTail($opponentSnakeSteppedArray[$i][1], $snake);
                     if ($distanceBetweenOpponentHeadAndSnakeTail <= $minDistanceBetweenOpponentHeadAndSnakeTail) {
@@ -227,6 +224,8 @@ class GameServiceImpl implements GameService
                     break;
                 }
             default:
+                {
+                }
         }
 
         return new Snake($head, $body, $tail, $snake->getIsBitten());
@@ -250,6 +249,133 @@ class GameServiceImpl implements GameService
         $distance = sqrt(($x1 - $x2) * ($x1 - $x2) + ($y1 - $y2) * ($y1 - $y2));
 
         return (int)$distance;
+    }
+
+
+    /**
+     * Проверяет укусил ли соперник змею соперника за хвост:
+     *  false, если нет,
+     *  иначе true.
+     *
+     * @param Snake $enemySnake
+     * @param Snake $allySnake
+     * @return bool
+     */
+    private function checkEnemySnakeCorrectBiteAllySnake(Snake $enemySnake, Snake $allySnake)
+    {
+        if ($this->checkTwoCoordinates($enemySnake->getHead(), $allySnake->getTail())) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Проверяет укусил ли соперник змею соперника не по правилам:
+     *  false, если нет,
+     *  иначе true.
+     *
+     * @param Snake $enemySnake
+     * @param Snake $allySnake
+     * @return bool
+     */
+    private function checkEnemySnakeUncorrectBiteAllySnake(Snake $enemySnake, Snake $allySnake)
+    {
+        if ($this->checkSnakesRelativeToEachOther($enemySnake, $allySnake, true) > 0) {
+            if (!$this->checkTwoCoordinates($enemySnake->getHead(), $allySnake->getTail())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Проверяет на корректность местополежия двух змей(если дополнительный параметр принимает значение false):
+     *  false, если змея пересикаются,
+     *  иначе true.
+     * Если дополнительный параметр принимает значение true, возвращает число пересечений змей.
+     *
+     * @param Snake $snake1
+     * @param Snake $snake2
+     * @param bool $getNum
+     * @return bool|number
+     */
+    private function checkSnakesRelativeToEachOther(Snake $snake1, Snake $snake2, bool $getNum)
+    {
+        $count = 0;
+        if (!$this->checkSnakeConcerningTheCoordinates($snake1, $snake2->getHead())) {
+            $count++;
+            if (!$getNum) {
+                return false;
+            }
+        }
+
+        if (!empty($snake2->getBody())) {
+            foreach ($snake2->getBody() as $coordinates) {
+                if (!$this->checkSnakeConcerningTheCoordinates($snake1, $coordinates)) {
+                    $count++;
+                    if (!$getNum) {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        if (!$this->checkSnakeConcerningTheCoordinates($snake1, $snake2->getTail())) {
+            $count++;
+            if (!$getNum) {
+                return false;
+            }
+        }
+
+        if ($getNum) {
+            return $count;
+        }
+        return true;
+    }
+
+    /**
+     * Проверяет совпадение координат змеи и заданных координат:
+     *  false, если змея находится на заданных координатах,
+     *  иначе true.
+     *
+     * @param Snake $snake
+     * @param array $coordinates
+     * @return bool
+     */
+    private function checkSnakeConcerningTheCoordinates(Snake $snake, array $coordinates)
+    {
+        if (!$this->checkTwoCoordinates($snake->getHead(), $coordinates)) {
+            return false;
+        }
+
+        if (!empty($snake->getBody())) {
+            foreach ($snake->getBody() as $item) {
+                if (!$this->checkTwoCoordinates($item, $coordinates)) {
+                    return false;
+                }
+            }
+        }
+
+        if (!$this->checkTwoCoordinates($snake->getTail(), $coordinates)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Возвращает false, если координаты совпадают, иначе true.
+     *
+     * @param array $coordinates1
+     * @param array $coordinates2
+     * @return bool
+     */
+    private function checkTwoCoordinates(array $coordinates1, array $coordinates2)
+    {
+        if ($coordinates1[0] == $coordinates2[0] and $coordinates1[1] == $coordinates2[1]) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -309,78 +435,21 @@ class GameServiceImpl implements GameService
     }
 
     /**
-     * Проверяет на корректность местополежия двух змей:
-     *  false, если змея пересикаются,
-     *  иначе true.
+     * Возвращает самый повторяемый элемент(ход) в массиве ходов змеи.
+     * Если нельзя выделить один конкретный ход, то возращает null.
      *
-     * @param Snake $snake1
-     * @param Snake $snake2
-     * @return bool
+     * @param array $array
+     * @return null|string
      */
-    private function checkSnakesRelativeToEachOther(Snake $snake1, Snake $snake2)
+    private function getTheMostRepetitiveElement(array &$array)
     {
-        if (!$this->checkSnakeConcerningTheCoordinates($snake1, $snake2->getHead())) {
-            return false;
-        }
-
-        if (!empty($snake2->getBody())) {
-            foreach ($snake2->getBody() as $coordinates) {
-                if (!$this->checkSnakeConcerningTheCoordinates($snake1, $coordinates)) {
-                    return false;
-                }
+        if (!empty($array)) {
+            $arrayCountValues = array_count_values($array);
+            if (arsort($arrayCountValues)) {
+                return key($arrayCountValues);
             }
         }
-
-        if (!$this->checkSnakeConcerningTheCoordinates($snake1, $snake2->getTail())) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Проверяет совпадение координат змеи и заданных координат:
-     *  false, если змея находится на заданных координатах,
-     *  иначе true.
-     *
-     * @param Snake $snake
-     * @param array $coordinates
-     * @return bool
-     */
-    private function checkSnakeConcerningTheCoordinates(Snake $snake, array $coordinates)
-    {
-        if (!$this->checkTwoCoordinates($snake->getHead(), $coordinates)) {
-            return false;
-        }
-
-        if (!empty($snake->getBody())) {
-            foreach ($snake->getBody() as $item) {
-                if (!$this->checkTwoCoordinates($item, $coordinates)) {
-                    return false;
-                }
-            }
-        }
-
-        if (!$this->checkTwoCoordinates($snake->getTail(), $coordinates)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Возвращает false, если координаты совпадают, иначе true.
-     *
-     * @param array $coordinates1
-     * @param array $coordinates2
-     * @return bool
-     */
-    private function checkTwoCoordinates(array $coordinates1, array $coordinates2)
-    {
-        if ($coordinates1[0] == $coordinates2[0] and $coordinates1[1] == $coordinates2[1]) {
-            return false;
-        }
-        return true;
+        return null;
     }
 
     /**

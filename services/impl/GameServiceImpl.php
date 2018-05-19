@@ -40,6 +40,9 @@ class GameServiceImpl implements GameService
         $allySnakes = $this->getSteppedSnakesArray($this->game->getAllySnake());
         $enemySnakes = $this->getSteppedSnakesArray($this->game->getEnemySnake());
 
+        /*
+         * Вычисляются все возможные ходы змеи союзника против всех возможных ходов змеи соперника
+         */
         foreach ($allySnakes as $snake) {
             $emptyStep = $this->getProbableMovementForOpponentSnake($snake, $enemySnakes);
             if ($emptyStep) {
@@ -47,10 +50,26 @@ class GameServiceImpl implements GameService
             }
         }
 
+        /*
+         * Выбирается самый повторяющийся ход змеи союзника, если таковой имеется.
+         * Иначе вычисляется самый простой ход соперника, против которого вычисляется ход союзника.
+         */
         $step = $this->getTheMostRepetitiveElement($steps);
         if (!$step) {
             $enemySnakeProbableStep = $this->getProbableMovementForOpponentSnake($this->game->getEnemySnake(), array($this->game->getAllySnake()));
             $step = $this->getProbableMovementForOpponentSnake($this->game->getAllySnake(), array($this->getSteppedSnake($enemySnakeProbableStep, $this->game->getEnemySnake())));
+
+            /*
+             * Если ход не найден, то выбирается случайный ход из массива возможных ходов.
+             */
+            if (!$step) {
+                $stepNumber = 0;
+                try {
+                    $stepNumber = random_int(0, count($steps));
+                } catch (\Exception $e) {
+                }
+                $step = $steps[$stepNumber];
+            }
         }
 
         return $step;
@@ -92,13 +111,15 @@ class GameServiceImpl implements GameService
             $opponentSnakeNumber = 0;
             $minDistanceBetweenSnakeHeadAndOpponentTail = Game::MAP_CELLS_COUNT;
             $minDistanceBetweenOpponentHeadAndSnakeTail = Game::MAP_CELLS_COUNT;
+
             for ($i = 0; $i < count($opponentSnakeSteppedArray); $i++) {
-                if ($this->checkSnakesRelativeToEachOther($snake, $opponentSnakeSteppedArray[$i])) {
-                    $minDistanceBetweenSnakeHeadAndOpponentTail = $this->getDistanceBetweenFirstSnakeHeadAndSecondSnakeTail($snake, $opponentSnakeSteppedArray[0][1]);
-                    $minDistanceBetweenOpponentHeadAndSnakeTail = $this->getDistanceBetweenFirstSnakeHeadAndSecondSnakeTail($opponentSnakeSteppedArray[0][1], $snake);
+                if ($this->checkSnakesRelativeToEachOther($snake, $opponentSnakeSteppedArray[$i][1])) {
+                    $minDistanceBetweenSnakeHeadAndOpponentTail = $this->getDistanceBetweenFirstSnakeHeadAndSecondSnakeTail($snake, $opponentSnakeSteppedArray[$i][1]);
+                    $minDistanceBetweenOpponentHeadAndSnakeTail = $this->getDistanceBetweenFirstSnakeHeadAndSecondSnakeTail($opponentSnakeSteppedArray[$i][1], $snake);
                     $opponentSnakeSteppedArray = $i;
                 }
             }
+
             if ($opponentSnakeNumber == 0) {
                 return null;
             }
@@ -107,8 +128,8 @@ class GameServiceImpl implements GameService
                 if ($this->checkSnakesRelativeToEachOther($snake, $opponentSnakeSteppedArray[$i])) {
                     $distanceBetweenSnakeHeadAndOpponentTail = $this->getDistanceBetweenFirstSnakeHeadAndSecondSnakeTail($snake, $opponentSnakeSteppedArray[$i][1]);
                     $distanceBetweenOpponentHeadAndSnakeTail = $this->getDistanceBetweenFirstSnakeHeadAndSecondSnakeTail($opponentSnakeSteppedArray[$i][1], $snake);
-                    if ($distanceBetweenSnakeHeadAndOpponentTail <= $minDistanceBetweenSnakeHeadAndOpponentTail) {
-                        if ($distanceBetweenOpponentHeadAndSnakeTail >= $minDistanceBetweenOpponentHeadAndSnakeTail) {
+                    if ($distanceBetweenOpponentHeadAndSnakeTail <= $minDistanceBetweenOpponentHeadAndSnakeTail) {
+                        if ($distanceBetweenSnakeHeadAndOpponentTail >= $minDistanceBetweenSnakeHeadAndOpponentTail) {
                             $step = $opponentSnakeSteppedArray[$i][0];
                         } else {
                             continue;

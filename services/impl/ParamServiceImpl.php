@@ -25,6 +25,7 @@ class ParamServiceImpl implements ParamService
 //                    ."}";
         $snake_id = $game->getSnakeId();
         $battle_id = $game->getBattleId();
+
         $params = '{"snake_id":"' . $snake_id . '", "battle_id":"' . $battle_id . '""}';
         return $params;
     }
@@ -38,6 +39,7 @@ class ParamServiceImpl implements ParamService
 //            ."}"; $
         $snake_id = $game->getSnakeId();
         $battle_id = $game->getBattleId();
+
         $params = '{"step":"' . $step . '", "snake_id":"' . $snake_id . '", "battle_id":"' . $battle_id . '""}';
         return $params;
     }

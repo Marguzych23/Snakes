@@ -48,7 +48,7 @@ class InitRequestResponseService extends RequestResponseService
             $snake_id = $response['snake_id'];
 
             self::$snake = new Snake(null, null, null, false);
-            self::$game = new Game($battle_id, $snake_id, null, self::$snake);
+            self::$game = new Game($battle_id, $snake_id, self::$snake, self::$snake);
         }
     }
 

@@ -11,14 +11,15 @@ spl_autoload_register(function ($class_name) {
 });
 
 use models\Game;
+use models\Snake;
 use services\impl\GameDataSharingService;
 use services\impl\GameServiceImpl;
 use services\impl\InitRequestResponseService;
 use services\impl\MovementControlService;
 use services\impl\ParamServiceImpl;
 
-$url = null;
-$game = null;
+$url = "http://80.211.132.97:5000/snake";
+$game = new Game(null, null, new Snake(null, null, null, false), new Snake(null, null, null, false));
 //$snake_id = null;
 //$battle_id = null;
 

@@ -38,7 +38,7 @@ class ParamServiceImpl implements ParamService
         return $params;
     }
 
-    public function getInitialisation($param) {
+    public function getInitialization($param) {
         $params = "{answer:$param}";
         return $params;
     }

@@ -32,7 +32,7 @@ $paramService = new ParamServiceImpl();
  * Инициализируем битву
  */
 while (true) {
-    $params = $paramService->getInitialisation(42);
+    $params = $paramService->getInitialization(42);
     $requestResponseService->send_request($url, $params);
 //    print_r($params);
     $game = $requestResponseService->getGame();

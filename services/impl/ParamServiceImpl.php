@@ -37,4 +37,9 @@ class ParamServiceImpl implements ParamService
         $params = json_decode(new RequestParamWithStepForm($game->getSnakeId(), $game->getBattleId(), $step));
         return $params;
     }
+
+    public static function getInitialisation($param) {
+        $param = json_decode("{'answer' : $param }");
+        return $param;
+    }
 }

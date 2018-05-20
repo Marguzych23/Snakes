@@ -20,7 +20,6 @@ abstract class RequestResponseService
         curl_setopt_array($this->curl, array(
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_URL => $url,
-            CURLOPT_PORT => true,
             CURLOPT_POSTFIELDS => array(
                 $params,
             )

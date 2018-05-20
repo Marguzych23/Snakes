@@ -23,7 +23,7 @@ class InitRequestResponseService extends RequestResponseService
      * @param $url
      * @param int $param
      */
-    public function send_request($url, $param = 42)
+    public function send_request($url, $param)
     {
         parent::send_request($url, $param);
         $response = parent::getResponse();

@@ -19,7 +19,8 @@ use services\impl\MovementControlService;
 use services\impl\ParamServiceImpl;
 
 $url = "http://80.211.132.97:5000/snake";
-$game = new Game(null, null, new Snake(null, null, null, false), new Snake(null, null, null, false));
+$game = new Game(null, null, new Snake(null, null, null, false),
+        new Snake(null, null, null, false));
 //$snake_id = null;
 //$battle_id = null;
 
@@ -31,7 +32,8 @@ $requestResponseService = new InitRequestResponseService();
  * Инициализируем битву
  */
 while (true) {
-    $requestResponseService->send_request($url);
+    $params = ParamServiceImpl::getInitialisation(42);
+    $requestResponseService->send_request($url, $params);
     $game = $requestResponseService->getGame();
     if (!is_null($game)) {
         break;

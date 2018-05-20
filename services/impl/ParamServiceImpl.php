@@ -38,8 +38,8 @@ class ParamServiceImpl implements ParamService
         return $params;
     }
 
-    public static function getInitialisation($param) {
-        $param = json_decode("{'answer' : $param }");
-        return $param;
+    public function getInitialisation($param) {
+        $params = "{answer:$param}";
+        return $params;
     }
 }

@@ -14,16 +14,15 @@ abstract class RequestResponseService
     private $curl;
     private $response;
 
-    public function send_request($url, $params) {
+    public function send_request($url, $params)
+    {
         $this->curl = curl_init();
 
-        curl_setopt_array($this->curl, array(
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_URL => $url,
-            CURLOPT_POST => true,
-            CURLOPT_POSTFIELDS => $params
-        ));
-
+        curl_setopt($this->curl, CURLOPT_URL, $url);
+        curl_setopt($this->curl, CURLOPT_POST, 1);
+        curl_setopt($this->curl, CURLOPT_POSTFIELDS, $params);
+        curl_setopt($this->curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($this->curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json;'));
 
         $response = curl_exec($this->curl);
         print_r($response);

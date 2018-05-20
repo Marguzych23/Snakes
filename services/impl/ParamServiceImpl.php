@@ -23,7 +23,9 @@ class ParamServiceImpl implements ParamService
 //                     ."snake_id:".$game->getSnakeId().","
 //                     ."battle_id:".$game->getBattleId()
 //                    ."}";
-        $params = json_decode(new SecondRequestParamForm($game->getSnakeId(), $game->getBattleId()));
+        $snake_id = $game->getSnakeId();
+        $battle_id = $game->getBattleId();
+        $params = '{"snake_id":"' . $snake_id . '", "battle_id":"' . $battle_id . '""}';
         return $params;
     }
 
@@ -33,13 +35,15 @@ class ParamServiceImpl implements ParamService
 //            ."step:'".$step."',"
 //            ."snake_id:".$game->getSnakeId().","
 //            ."battle_id:".$game->getBattleId()
-//            ."}";
-        $params = json_decode(new RequestParamWithStepForm($game->getSnakeId(), $game->getBattleId(), $step));
+//            ."}"; $
+        $snake_id = $game->getSnakeId();
+        $battle_id = $game->getBattleId();
+        $params = '{"step":"' . $step . '", "snake_id":"' . $snake_id . '", "battle_id":"' . $battle_id . '""}';
         return $params;
     }
 
     public function getInitialization($param) {
-        $params = "{answer:$param}";
+        $params = '{"answer":"' . $param . '"}';
         return $params;
     }
 }

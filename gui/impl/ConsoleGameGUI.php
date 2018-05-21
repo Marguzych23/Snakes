@@ -37,9 +37,6 @@ class ConsoleGameGUI implements GameGUI
     {
         $tempArray = array_fill(0, Game::MAP_CELLS_COUNT, 0);
         $this->battlefield = array_fill(0, Game::MAP_CELLS_COUNT, $tempArray);
-        print_r($this->battlefield);
-
-        print_r($this->game);
 
         $this->addSnakeOnBattlefield($this->game->getAllySnake(), true);
         $this->addSnakeOnBattlefield($this->game->getEnemySnake(), false);

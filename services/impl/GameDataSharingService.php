@@ -34,7 +34,7 @@ class GameDataSharingService extends RequestResponseService
         } elseif (isset($response["battle"])) {
             $this->setAllData($response);
         } else {
-            die('Error: "' . curl_error($curl) . '" - Code: ' . curl_errno($curl));
+            die(self::class.' Error: "' . curl_error($curl) . '" - Code: ' . curl_errno($curl));
         }
     }
 

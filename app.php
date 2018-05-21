@@ -33,7 +33,7 @@ while (true) {
     $requestResponseService->send_request($url, $params);
     $game = $requestResponseService->getGame();
     if (!is_null($game)) {
-        print_r("Run game");
+        print_r("Run game\n");
         break;
     }
 }
@@ -54,7 +54,6 @@ while (true) {
             print_r("Our step $step\n");
             $params = ParamServiceImpl::getRequestParamsWithStep($emptyGame, $step);
             $gameMovementControlService->send_request($url, $params);
-            print_r("Our step $step\n");
 
             /*
              * Окончание, если оно есть

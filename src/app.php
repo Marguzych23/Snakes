@@ -20,7 +20,7 @@ spl_autoload_register(function ($class_name) {
 });
 
 
-$url = "http://80.211.132.97:5000/snake";
+$url = "http://80.211.132.97:8888/snake";
 $game = new Game(null, null, new Snake(null, null, null, false),
     new Snake(null, null, null, false), null);
 
@@ -66,6 +66,8 @@ while (true) {
             $gameService = new GameServiceImpl($emptyGame);
             $step = $gameService->getStepForAllySnake();
             print_r("Our step $step\n");
+            $a = $game->getSnakeId();
+            print_r("$a --- $step\n");
             $params = ParamServiceImpl::getRequestParamsWithStep($emptyGame, $step);
             $gameMovementControlService->send_request($url, $params);
         } else {

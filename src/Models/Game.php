@@ -16,12 +16,12 @@ class Game
     private $allySnake;
     private $stepsLeft;
 
-    const MAP_CELLS_COUNT = 50;
+    const MAP_CELLS_COUNT = 10;
 
     const STEP_DOWN = "down";
     const STEP_UP = "up";
-    const STEP_LEFT = "left";
-    const STEP_RIGHT = "right";
+    const STEP_LEFT = "right";
+    const STEP_RIGHT = "left";
 
     /**
      * Game constructor.

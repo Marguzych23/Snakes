@@ -32,7 +32,7 @@ class InitRequestResponseService extends RequestResponseService
         if ($response) {
             $this->init($response);
         } else {
-            die('Error: "' . curl_error($curl) . '" - Code: ' . curl_errno($curl));
+            die(self::class.' Error: "' . curl_error($curl) . '" - Code: ' . curl_errno($curl));
         }
     }
 

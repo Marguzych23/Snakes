@@ -32,7 +32,7 @@ class MovementControlService extends RequestResponseService
                 . "our score: " . $response["your score"] . ",\n"
                 . "enemy score: " . $response["enemy score"] . ".";
         } else {
-            die('Error: "' . curl_error($curl) . '" - Code: ' . curl_errno($curl));
+            die(self::class.' Error: "' . curl_error($curl) . '" - Code: ' . curl_errno($curl));
         }
     }
 

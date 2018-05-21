@@ -26,20 +26,20 @@ class GameDataSharingService extends RequestResponseService
         $response = parent::getResponse();
         $curl = parent::getCurl();
 
+        $statusCode = curl_getinfo($curl)["http_code"];
         $response = json_decode($response, true);
 
-        if ($response) {
-            if ($response[0] == 202) {
-                $this->send_request($url, $params);
-            } else {
-                $this->setAllData($response);
-            }
+        if ($statusCode == 202) {
+            $this->send_request($url, $params);
+        } elseif (isset($response["battle"])) {
+            $this->setAllData($response);
         } else {
             die('Error: "' . curl_error($curl) . '" - Code: ' . curl_errno($curl));
         }
     }
 
-    public function setAllData($response) {
+    public function setAllData($response)
+    {
         $snakes = $response['snakes'];
         $enemySnake = $snakes['enemy'];
         $allySnake = $snakes['ally'];
@@ -55,7 +55,8 @@ class GameDataSharingService extends RequestResponseService
         $this->game = new Game($battleId, $snakeId, $this->enemySnake, $this->allySnake);
     }
 
-    public function stepsLeft($response) {
+    public function stepsLeft($response)
+    {
         $battle = $response['battle'];
 
         return $battle['steps_left'];

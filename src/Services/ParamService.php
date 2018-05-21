@@ -15,4 +15,6 @@ interface ParamService
     public static function getRequestParamsForGettingGameData(Game $game);
 
     public static function getRequestParamsWithStep(Game $game, string $step);
+
+    public static function getInitialisation();
 }

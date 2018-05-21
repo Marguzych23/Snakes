@@ -46,6 +46,14 @@ $gameMovementControlService = new MovementControlService();
 while (true) {
     $params = ParamServiceImpl::getRequestParamsForGettingGameData($game);
     $gameDataSharingService->send_request($url, $params);
+
+    /*
+     * Окончание, если оно есть
+     */
+    if (!is_null($gameDataSharingService->getEndString())) {
+        print_r($gameDataSharingService->getEndString());
+        break;
+    }
     $emptyGame = $gameDataSharingService->getGame();
     if ($game instanceof Game and $emptyGame instanceof Game) {
         if ($game->getBattleId() == $emptyGame->getBattleId() and $game->getSnakeId() == $emptyGame->getSnakeId()) {
@@ -54,14 +62,6 @@ while (true) {
             print_r("Our step $step\n");
             $params = ParamServiceImpl::getRequestParamsWithStep($emptyGame, $step);
             $gameMovementControlService->send_request($url, $params);
-
-            /*
-             * Окончание, если оно есть
-             */
-            if (!is_null($gameMovementControlService->getEndString())) {
-//                print_r($gameMovementControlService->getEndString());
-                break;
-            }
         } else {
             continue;
         }

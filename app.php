@@ -10,6 +10,7 @@ spl_autoload_register(function ($class_name) {
     include_once $class_name . '.php';
 });
 
+use gui\impl\ConsoleGameGUI;
 use models\Game;
 use models\Snake;
 use services\impl\GameDataSharingService;
@@ -24,6 +25,7 @@ $game = new Game(null, null, new Snake(null, null, null, false),
 
 $gameService = new GameServiceImpl($game);
 $requestResponseService = new InitRequestResponseService();
+$gui = new ConsoleGameGUI($game);
 
 /*
  * Инициализируем битву
@@ -57,6 +59,9 @@ while (true) {
     $emptyGame = $gameDataSharingService->getGame();
     if ($game instanceof Game and $emptyGame instanceof Game) {
         if ($game->getBattleId() == $emptyGame->getBattleId() and $game->getSnakeId() == $emptyGame->getSnakeId()) {
+            $gui->setGame($emptyGame);
+            $gui->draw();
+
             $gameService = new GameServiceImpl($emptyGame);
             $step = $gameService->getStepForAllySnake();
             print_r("Our step $step\n");

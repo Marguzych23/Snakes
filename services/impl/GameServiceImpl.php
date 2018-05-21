@@ -59,8 +59,13 @@ class GameServiceImpl implements GameService
          */
         $step = $this->getTheMostRepetitiveElement($steps);
         if (!$step) {
-            $enemySnakeProbableStep = $this->getProbableMovementForOpponentSnake($this->game->getEnemySnake(), array($this->game->getAllySnake()));
-            $step = $this->getProbableMovementForOpponentSnake($this->game->getAllySnake(), array($this->getSteppedSnake($enemySnakeProbableStep, $this->game->getEnemySnake())));
+            $enemySnakeProbableStep = $this->getProbableMovementForOpponentSnake($this->game->getAllySnake(), $enemySnakes);
+
+            $emptyEnemySnakeSteppedArray = array(0 => array(
+                0 => $enemySnakeProbableStep,
+                1 => $this->getSteppedSnake($enemySnakeProbableStep, $this->game->getEnemySnake())));
+
+            $step = $this->getProbableMovementForOpponentSnake($this->game->getAllySnake(), $emptyEnemySnakeSteppedArray);
 
             /*
              * Если ход не найден, то выбирается случайный ход из массива возможных ходов.
@@ -101,27 +106,28 @@ class GameServiceImpl implements GameService
         if (!empty($opponentSnakeSteppedArray)) {
             $step = $opponentSnakeSteppedArray[0][0];
 
-            $opponentSnakeNumber = 0;
+            $opponentSnakeNumber = -1;
             $minDistanceBetweenSnakeHeadAndOpponentTail = Game::MAP_CELLS_COUNT;
             $minDistanceBetweenOpponentHeadAndSnakeTail = Game::MAP_CELLS_COUNT;
 
             for ($i = 0; $i < count($opponentSnakeSteppedArray); $i++) {
-                if ($this->checkSnakesRelativeToEachOther($snake, $opponentSnakeSteppedArray[$i][1], true) < 2) {
-                    if ($this->checkEnemySnakeCorrectBiteAllySnake($snake, $opponentSnakeSteppedArray[$i][1])) {
+                if ($this->checkSnakesRelativeToEachOther($snake, $opponentSnakeSteppedArray[$i][1], true) <= 2) {
+                    if (!$this->checkEnemySnakeCorrectBiteAllySnake($snake, $opponentSnakeSteppedArray[$i][1])) {
                         continue;
                     }
                     $minDistanceBetweenSnakeHeadAndOpponentTail = $this->getDistanceBetweenFirstSnakeHeadAndSecondSnakeTail($snake, $opponentSnakeSteppedArray[$i][1]);
                     $minDistanceBetweenOpponentHeadAndSnakeTail = $this->getDistanceBetweenFirstSnakeHeadAndSecondSnakeTail($opponentSnakeSteppedArray[$i][1], $snake);
-                    $opponentSnakeSteppedArray = $i;
+                    $opponentSnakeNumber = $i;
+                    break;
                 }
             }
 
-            if ($opponentSnakeNumber == 0) {
+            if ($opponentSnakeNumber == -1) {
                 return null;
             }
 
             for ($i = $opponentSnakeNumber; $i < count($opponentSnakeSteppedArray); $i++) {
-                if ($this->checkSnakesRelativeToEachOther($snake, $opponentSnakeSteppedArray[$i], true) < 2) {
+                if ($this->checkSnakesRelativeToEachOther($snake, $opponentSnakeSteppedArray[$i][1], true) < 2) {
                     if ($this->checkEnemySnakeCorrectBiteAllySnake($snake, $opponentSnakeSteppedArray[$i][1])) {
                         continue;
                     }

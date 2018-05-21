@@ -20,13 +20,10 @@ use services\impl\ParamServiceImpl;
 
 $url = "http://80.211.132.97:5000/snake";
 $game = new Game(null, null, new Snake(null, null, null, false),
-        new Snake(null, null, null, false));
-//$snake_id = null;
-//$battle_id = null;
+    new Snake(null, null, null, false));
 
 $gameService = new GameServiceImpl($game);
 $requestResponseService = new InitRequestResponseService();
-//$paramService = new ParamServiceImpl();
 
 /*
  * Инициализируем битву
@@ -48,9 +45,7 @@ $gameDataSharingService = new GameDataSharingService();
 $gameMovementControlService = new MovementControlService();
 while (true) {
     $params = ParamServiceImpl::getRequestParamsForGettingGameData($game);
-    print_r($params);
     $gameDataSharingService->send_request($url, $params);
-    print_r("a");
     $emptyGame = $gameDataSharingService->getGame();
     if ($game instanceof Game and $emptyGame instanceof Game) {
         if ($game->getBattleId() == $emptyGame->getBattleId() and $game->getSnakeId() == $emptyGame->getSnakeId()) {
@@ -65,7 +60,7 @@ while (true) {
              * Окончание, если оно есть
              */
             if (!is_null($gameMovementControlService->getEndString())) {
-                print_r($gameMovementControlService->getEndString());
+//                print_r($gameMovementControlService->getEndString());
                 break;
             }
         } else {

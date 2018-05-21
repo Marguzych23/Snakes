@@ -6,8 +6,7 @@
  * Time: 15:22
  */
 
-namespace models;
-
+namespace Models;
 
 class Game
 {

@@ -6,7 +6,7 @@
  * Time: 1:50
  */
 
-namespace forms;
+namespace Forms;
 
 
 class InitialRequestForm

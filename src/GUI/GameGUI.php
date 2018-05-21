@@ -6,7 +6,7 @@
  * Time: 4:28
  */
 
-namespace gui;
+namespace GUI;
 
 interface GameGUI
 {

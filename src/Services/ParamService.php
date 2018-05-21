@@ -6,10 +6,9 @@
  * Time: 12:32
  */
 
-namespace services;
+namespace Services;
 
-
-use models\Game;
+use Models\Game;
 
 interface ParamService
 {

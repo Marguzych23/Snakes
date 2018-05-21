@@ -6,7 +6,7 @@
  * Time: 19:23
  */
 
-namespace models;
+namespace Models;
 
 class Snake
 {

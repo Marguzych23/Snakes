@@ -6,18 +6,19 @@
  * Time: 16:41
  */
 
+use GUI\Impl\ConsoleGameGUI;
+use Models\Game;
+use Models\Snake;
+use Services\Impl\GameDataSharingService;
+use Services\Impl\GameServiceImpl;
+use Services\Impl\InitRequestResponseService;
+use Services\Impl\MovementControlService;
+use Services\Impl\ParamServiceImpl;
+
 spl_autoload_register(function ($class_name) {
     include_once $class_name . '.php';
 });
 
-use gui\impl\ConsoleGameGUI;
-use models\Game;
-use models\Snake;
-use services\impl\GameDataSharingService;
-use services\impl\GameServiceImpl;
-use services\impl\InitRequestResponseService;
-use services\impl\MovementControlService;
-use services\impl\ParamServiceImpl;
 
 $url = "http://80.211.132.97:5000/snake";
 $game = new Game(null, null, new Snake(null, null, null, false),

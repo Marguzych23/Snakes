@@ -6,13 +6,13 @@
  * Time: 12:36
  */
 
-namespace services\impl;
+namespace Services\Impl;
 
-use forms\InitialRequestForm;
-use forms\RequestParamWithStepForm;
-use forms\SecondRequestParamForm;
-use models\Game;
-use services\ParamService;
+use Forms\InitialRequestForm;
+use Forms\RequestParamWithStepForm;
+use Forms\SecondRequestParamForm;
+use Models\Game;
+use Services\ParamService;
 
 class ParamServiceImpl implements ParamService
 {

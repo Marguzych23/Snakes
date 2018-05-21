@@ -59,8 +59,9 @@ class GameDataSharingService extends RequestResponseService
         $battle = $response["battle"];
         $battleId = $battle["battle_id"];
         $snakeId = $battle["snake_id"];
+        $stepsLeft = $battle['steps_left'];
 
-        $this->game = new Game($battleId, $snakeId, $this->enemySnake, $this->allySnake);
+        $this->game = new Game($battleId, $snakeId, $this->enemySnake, $this->allySnake, $stepsLeft);
     }
 
     public function stepsLeft($response)

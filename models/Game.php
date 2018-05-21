@@ -15,6 +15,7 @@ class Game
     private $snakeId;
     private $enemySnake;
     private $allySnake;
+    private $stepsLeft;
 
     const MAP_CELLS_COUNT = 50;
 
@@ -27,16 +28,19 @@ class Game
      * Game constructor.
      * @param $battleId
      * @param $snakeId
-     * @param Snake $enemySnake
-     * @param Snake $allySnake
+     * @param $enemySnake
+     * @param $allySnake
+     * @param $stepsLeft
      */
-    public function __construct($battleId, $snakeId, Snake $enemySnake, Snake $allySnake)
+    public function __construct($battleId, $snakeId, $enemySnake, $allySnake, $stepsLeft)
     {
         $this->battleId = $battleId;
         $this->snakeId = $snakeId;
         $this->enemySnake = $enemySnake;
         $this->allySnake = $allySnake;
+        $this->stepsLeft = $stepsLeft;
     }
+
 
     /**
      * @return Snake enemy
@@ -101,4 +105,22 @@ class Game
     {
         $this->snakeId = $snakeId;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getStepsLeft()
+    {
+        return $this->stepsLeft;
+    }
+
+    /**
+     * @param mixed $stepsLeft
+     */
+    public function setStepsLeft($stepsLeft): void
+    {
+        $this->stepsLeft = $stepsLeft;
+    }
+
+
 }

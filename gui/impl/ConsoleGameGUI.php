@@ -62,6 +62,7 @@ class ConsoleGameGUI implements GameGUI
         } else {
             $head = ConsoleGameGUI::ENEMY_HEAD_PRESENTS;
         }
+
         $this->battlefield[$snake->getHead()[0]][$snake->getHead()[1]] = $head;
         $this->battlefield[$snake->getTail()[0]][$snake->getTail()[1]] = ConsoleGameGUI::TAIL_PRESENTS;
         if (!empty($snake->getBody())) {

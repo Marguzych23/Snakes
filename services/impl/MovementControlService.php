@@ -21,17 +21,16 @@ class MovementControlService extends RequestResponseService
         parent::send_request($url, $params);
         $response = parent::getResponse();
         $curl = parent::getCurl();
+
+        $statusCode = curl_getinfo($curl)["http_code"];
         $response = json_decode($response, true);
 
-        if ($response) {
-            if (!$response[0] == 200) {
-                if (isset($response["you"])) {
-                    $this->endString = "We " . $response["you"] . ":\n"
-                        . "our score: " . $response["your score"] . ",\n"
-                        . "enemy score: " . $response["enemy score"] . ".";
-                }
-                $this->send_request($url, $params);
-            }
+
+        if ($statusCode == 200) {
+        } elseif (isset($response["you"])) {
+            $this->endString = "We " . $response["you"] . ":\n"
+                . "our score: " . $response["your score"] . ",\n"
+                . "enemy score: " . $response["enemy score"] . ".";
         } else {
             die('Error: "' . curl_error($curl) . '" - Code: ' . curl_errno($curl));
         }

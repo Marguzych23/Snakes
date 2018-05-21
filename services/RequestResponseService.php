@@ -25,7 +25,6 @@ abstract class RequestResponseService
         curl_setopt($this->curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json;'));
 
         $response = curl_exec($this->curl);
-        print_r($response);
 
         $this->response = $response;
     }

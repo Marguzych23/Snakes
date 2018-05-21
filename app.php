@@ -26,15 +26,14 @@ $game = new Game(null, null, new Snake(null, null, null, false),
 
 $gameService = new GameServiceImpl($game);
 $requestResponseService = new InitRequestResponseService();
-$paramService = new ParamServiceImpl();
+//$paramService = new ParamServiceImpl();
 
 /*
  * Инициализируем битву
  */
 while (true) {
-    $params = $paramService->getInitialization(42);
+    $params = ParamServiceImpl::getInitialisation();
     $requestResponseService->send_request($url, $params);
-//    print_r($params);
     $game = $requestResponseService->getGame();
     if (!is_null($game)) {
         print_r("Run game");
@@ -49,12 +48,15 @@ $gameDataSharingService = new GameDataSharingService();
 $gameMovementControlService = new MovementControlService();
 while (true) {
     $params = ParamServiceImpl::getRequestParamsForGettingGameData($game);
+    print_r($params);
     $gameDataSharingService->send_request($url, $params);
+    print_r("a");
     $emptyGame = $gameDataSharingService->getGame();
     if ($game instanceof Game and $emptyGame instanceof Game) {
         if ($game->getBattleId() == $emptyGame->getBattleId() and $game->getSnakeId() == $emptyGame->getSnakeId()) {
             $gameService = new GameServiceImpl($emptyGame);
             $step = $gameService->getStepForAllySnake();
+            print_r("Our step $step\n");
             $params = ParamServiceImpl::getRequestParamsWithStep($emptyGame, $step);
             $gameMovementControlService->send_request($url, $params);
             print_r("Our step $step\n");

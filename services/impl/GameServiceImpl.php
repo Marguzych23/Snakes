@@ -45,9 +45,11 @@ class GameServiceImpl implements GameService
          * и добавляются в массив ходов $steps.
          */
         foreach ($allySnakes as $snake) {
-            $newStep = $this->getProbableMovementForOpponentSnake($snake, $enemySnakes);
-            if ($newStep) {
-                array_push($steps, $newStep);
+            if ($snake instanceof Snake) {
+                $newStep = $this->getProbableMovementForOpponentSnake($snake, $enemySnakes);
+                if ($newStep) {
+                    array_push($steps, $newStep);
+                }
             }
         }
 

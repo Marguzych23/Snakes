@@ -16,6 +16,8 @@ use services\RequestResponseService;
 class GameDataSharingService extends RequestResponseService
 {
 
+    private $endString = null;
+
     private $allySnake;
     private $enemySnake;
     private $game;
@@ -33,7 +35,13 @@ class GameDataSharingService extends RequestResponseService
             $this->send_request($url, $params);
         } elseif (isset($response["battle"])) {
             $this->setAllData($response);
+        } elseif (isset($response["you"])) {
+            $this->endString = "We " . $response["you"] . ":\n"
+                . "our score: " . $response["your score"] . ",\n"
+                . "enemy score: " . $response["enemy score"] . ".";
         } else {
+            print_r(curl_getinfo($curl));
+            print_r($response);
             die(self::class.' Error: "' . curl_error($curl) . '" - Code: ' . curl_errno($curl));
         }
     }
@@ -84,5 +92,14 @@ class GameDataSharingService extends RequestResponseService
     public function getGame()
     {
         return $this->game;
+    }
+
+
+    /**
+     * @return null
+     */
+    public function getEndString()
+    {
+        return $this->endString;
     }
 }

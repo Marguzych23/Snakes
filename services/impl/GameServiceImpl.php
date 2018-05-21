@@ -436,7 +436,7 @@ class GameServiceImpl implements GameService
      */
     private function checkOutAbroad(int $x)
     {
-        if ($x < 0 or $x > Game::MAP_CELLS_COUNT) {
+        if ($x < 0 or $x >= Game::MAP_CELLS_COUNT) {
             return false;
         }
         return true;

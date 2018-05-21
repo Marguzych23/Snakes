@@ -6,12 +6,12 @@
  * Time: 4:30
  */
 
-namespace gui\impl;
+namespace GUI\Impl;
 
 
-use gui\GameGUI;
-use models\Game;
-use models\Snake;
+use GUI\GameGUI;
+use Models\Game;
+use Models\Snake;
 
 class ConsoleGameGUI implements GameGUI
 {
@@ -44,7 +44,7 @@ class ConsoleGameGUI implements GameGUI
         $map = "";
         for ($i = 0; $i < Game::MAP_CELLS_COUNT; $i++) {
             for ($j = 0; $j < Game::MAP_CELLS_COUNT; $j++) {
-                $map .= "|".$this->battlefield[$i][$j];
+                $map .= "|" . $this->battlefield[$i][$j];
             }
             $map .= "|\n";
         }
@@ -56,7 +56,8 @@ class ConsoleGameGUI implements GameGUI
      * @param Snake $snake
      * @param bool $isAlly
      */
-    private function addSnakeOnBattlefield(Snake $snake, bool $isAlly) {
+    private function addSnakeOnBattlefield(Snake $snake, bool $isAlly)
+    {
         if ($isAlly) {
             $head = ConsoleGameGUI::ALLY_HEAD_PRESENTS;
         } else {

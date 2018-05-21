@@ -6,12 +6,12 @@
  * Time: 21:37
  */
 
-namespace services\impl;
+namespace Services\Impl;
 
 
-use models\Game;
-use models\Snake;
-use services\RequestResponseService;
+use Models\Game;
+use Models\Snake;
+use Services\RequestResponseService;
 
 class GameDataSharingService extends RequestResponseService
 {

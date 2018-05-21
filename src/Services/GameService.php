@@ -6,7 +6,7 @@
  * Time: 15:39
  */
 
-namespace services;
+namespace Services;
 
 
 interface GameService

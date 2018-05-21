@@ -6,10 +6,9 @@
  * Time: 20:15
  */
 
-namespace services\impl;
+namespace Services\Impl;
 
-
-use services\RequestResponseService;
+use Services\RequestResponseService;
 
 class MovementControlService extends RequestResponseService
 {

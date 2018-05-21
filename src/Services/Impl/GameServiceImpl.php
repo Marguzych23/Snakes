@@ -6,11 +6,11 @@
  * Time: 20:41
  */
 
-namespace services\impl;
+namespace Services\Impl;
 
-use models\Game;
-use models\Snake;
-use services\GameService;
+use Models\Game;
+use Models\Snake;
+use Services\GameService;
 
 class GameServiceImpl implements GameService
 {

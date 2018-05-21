@@ -3,30 +3,27 @@
  * Created by PhpStorm.
  * User: Marguzych
  * Date: 20.05.2018
- * Time: 1:55
+ * Time: 1:54
  */
 
-namespace forms;
+namespace Forms;
 
 
-class RequestParamWithStepForm
+class SecondRequestParamForm
 {
 
     public $snake_id;
     public $battle_id;
-    public $step;
 
     /**
-     * RequestParamWithStepForm constructor.
+     * SecondRequestParamForm constructor.
      * @param $snake_id
      * @param $battle_id
-     * @param $step
      */
-    public function __construct($snake_id, $battle_id, $step)
+    public function __construct($snake_id, $battle_id)
     {
         $this->snake_id = $snake_id;
         $this->battle_id = $battle_id;
-        $this->step = $step;
     }
 
     /**
@@ -59,22 +56,6 @@ class RequestParamWithStepForm
     public function setBattleId($battle_id): void
     {
         $this->battle_id = $battle_id;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getStep()
-    {
-        return $this->step;
-    }
-
-    /**
-     * @param mixed $step
-     */
-    public function setStep($step): void
-    {
-        $this->step = $step;
     }
 
 
